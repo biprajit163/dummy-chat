@@ -1,6 +1,6 @@
 
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -32,12 +32,26 @@ function App() {
 
   const [user, loading, error] = useAuthState(auth);
 
+  interface UserObj {
+    name?: string;
+    email?: string;
+    photoURL?: string;
+    phoneNumber?: string;
+  }
+
+  let UserData:UserObj = {
+    name: user?.displayName?.toString(),
+    email: user?.email?.toString(),
+    photoURL: user?.photoURL?.toString(),
+    phoneNumber: user?.phoneNumber?.toString(),
+  }
+
 
   const SignIn = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);
     
-    console.log('Signed In');
+    console.log('Signed in with google');
   };
 
   const SignOut = () => {
@@ -45,7 +59,9 @@ function App() {
     console.log('Signed Out');
   };
 
-  const checkUser = () => {
+  const CheckUser = () => {
+    console.log(UserData);
+
     if (loading) {
       return(
         <div>
@@ -63,7 +79,11 @@ function App() {
     if (user) {
       return(
         <div>
-          <p>Current User: {user.email}</p>
+          <p>Current User: {UserData.email}</p>
+          <p>User Name: <b>{UserData.name}</b></p>
+          <div>User Photo: <img src={UserData.photoURL} alt="User Photo"/></div>
+          <p>User Phone Number: {UserData.phoneNumber ? 
+          UserData.phoneNumber : <span>User doesn't have number</span>}</p>
           <button onClick={SignOut}>Sign Out</button>
         </div>
       );
@@ -77,15 +97,7 @@ function App() {
       <header className="App-header"></header>
       <div className="App-body">
         <h1>Hello Chat App</h1>
-        { 
-          user ? 
-          <div>
-            <p>Current User: {user.email}</p>
-            <b>Username: {user.displayName}</b>
-            <button onClick={SignOut}>Sign Out</button>
-          </div> :
-          <button onClick={SignIn}>Sign In with Google</button>
-        }
+        <CheckUser/>
       </div>
     </div>
   );
