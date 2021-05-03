@@ -1,11 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+
+firebase.initializeApp({
+  // configure app info
+});
+
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello World!</h1>
+      <header className="App-header">
+
+      </header>
     </div>
   );
 }
