@@ -30,14 +30,62 @@ const firestore = firebase.firestore();
 
 function App() { 
 
-  console.log("Hello World");
-  console.log(firebaseConfig);
+  const [user, loading, error] = useAuthState(auth);
+
+
+  const SignIn = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+    
+    console.log('Signed In');
+  };
+
+  const SignOut = () => {
+    auth.signOut();
+    console.log('Signed Out');
+  };
+
+  const checkUser = () => {
+    if (loading) {
+      return(
+        <div>
+          <p>Initializing User...</p>
+        </div>
+      );
+    }
+
+    if (error) {
+      return(
+        <div>Error: {error}</div>
+      );
+    }
+
+    if (user) {
+      return(
+        <div>
+          <p>Current User: {user.email}</p>
+          <button onClick={SignOut}>Sign Out</button>
+        </div>
+      );
+    }
+
+    return <button onClick={SignIn}>Sign In with Google</button>
+  };
 
   return (
     <div className="App">
       <header className="App-header"></header>
       <div className="App-body">
         <h1>Hello Chat App</h1>
+        { 
+          user ? 
+          <div>
+            <p>Current User: {user.email}</p>
+            <b>Username: {user.displayName}</b>
+            <button onClick={SignOut}>Sign Out</button>
+          </div> :
+          <button onClick={SignIn}>Sign In with Google</button>
+        }
       </div>
     </div>
   );
