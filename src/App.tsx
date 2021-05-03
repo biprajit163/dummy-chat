@@ -11,6 +11,12 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { pathToFileURL } from 'node:url';
 
 
+// Components
+import { TextField } from './components/TextField';
+
+
+
+/* Firebase database configuration --------------------------------------------- */
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -26,6 +32,8 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
+
+/* ----------------------------------------------------------------------------- */
 
 
 function App() { 
@@ -60,8 +68,6 @@ function App() {
   };
 
   const CheckUser = () => {
-    console.log(UserData);
-
     if (loading) {
       return(
         <div>
@@ -98,6 +104,11 @@ function App() {
       <div className="App-body">
         <h1>Hello Chat App</h1>
         <CheckUser/>
+        <TextField 
+          name="some name" 
+          features={false} 
+          scores={[10, "ballon", null, false, 32]} 
+        />
       </div>
     </div>
   );
